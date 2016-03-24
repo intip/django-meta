@@ -36,12 +36,14 @@ class Meta(object):
         self.use_title_tag = kwargs.get('use_title_tag', settings.USE_TITLE_TAG)
 
     def get_domain(self):
+        if not settings.SITE_DOMAIN:
+            return settings.SITE_DOMAIN
+
         if self.use_sites:
             from django.contrib.sites.models import Site
             return Site.objects.get_current().domain
-        if not settings.SITE_DOMAIN:
-            raise ImproperlyConfigured('META_SITE_DOMAIN is not set')
-        return settings.SITE_DOMAIN
+
+        raise ImproperlyConfigured('META_SITE_DOMAIN is not set')
 
     def get_protocol(self):
         if not settings.SITE_PROTOCOL:
